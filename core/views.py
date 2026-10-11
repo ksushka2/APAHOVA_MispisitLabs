@@ -16,6 +16,7 @@ def home(request):
                 "Информационная система детской IT-школы."
             ),
             "version": "0.0.1",
+            "active_nav": "home",
         },
     )
 
