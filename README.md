@@ -4,7 +4,7 @@
 
 ## Запуск
 
-Репозиторий: https://github.com  
+Репозиторий: https://github.com
 Ветка: lab3  
 Pull Request: еще не сделала, сделаю
 Образ: ksushkaap/mispisit-lab1:0.0.3  
