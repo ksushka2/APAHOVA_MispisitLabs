@@ -12,4 +12,5 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["gunicorn", "it_school.wsgi:application", "--bind", "0.0.0.0:8080"]
+CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && gunicorn it_school.wsgi:application --bind 0.0.0.0:8080"]
+

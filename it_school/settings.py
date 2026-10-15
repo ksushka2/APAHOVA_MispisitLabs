@@ -1,3 +1,6 @@
+import os
+import dj_database_url
+
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,7 +36,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "it_school.wsgi.application"
 
-DATABASES = {}
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL', 'postgres://app:app@db:5432/app')
+    )
+}
 
 LANGUAGE_CODE = "ru-ru"
 TIME_ZONE = "Europe/Samara"
