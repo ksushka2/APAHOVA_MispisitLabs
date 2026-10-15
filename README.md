@@ -4,13 +4,13 @@
 
 ## Запуск
 
-Репозиторий: https://github.com/ksushka2
+Репозиторий: https://github.com
 Ветка: lab3  
 Pull Request: еще не сделала, сделаю
 Образ: ksushkaap/mispisit-lab1:0.0.3  
 
 ```bash
-git clone -b lab3 https://github.com/ksushka2
+git clone -b lab3 https://github.com
 cd APAHOVA_MispisitLabs
 docker compose up -d
 ```
