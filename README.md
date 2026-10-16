@@ -1,17 +1,19 @@
-IT-Школа — лабораторная работа №2
+# IT-Школа — лабораторная работа №3
 
-Информационная система детской IT-школы: приём заявок на курсы, просмотр списка и карточки заявки, сценарии отказа.
+Информационная система детской IT-школы с сохранением данных.
 
 ## Запуск
 
-### Docker Hub
+Репозиторий: https://github.com/ksushka2/APAHOVA_MispisitLabs
 
-```bash
-docker pull ksushkaap/mispisit-lab1:0.0.2
-docker run --rm -p 8080:8080 ksushkaap/mispisit-lab1:0.0.2
-```
+Ветка: lab3
 
-Откройте в браузере: http://localhost:8080
+Pull: https://github.com/ksushka2/APAHOVA_MispisitLabs/pull/3
+
+Образ: ksushkaap/mispisit-lab1:0.0.3
+
+Страница образа: https://hub.docker.com/r/ksushkaap/mispisit-lab1
+
 
 ### Страницы
 
@@ -22,25 +24,18 @@ docker run --rm -p 8080:8080 ksushkaap/mispisit-lab1:0.0.2
 | `/requests/new` | Создание заявки |
 | `/requests/1` | Карточка заявки |
 | `/access-denied` | Отказ / ошибочный сценарий |
-
-Пример отказа «чужая заявка»: http://localhost:8080/requests/1?parent_phone=%2B79999999999
-
-## Локальная разработка
+ 
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py runserver 8080
+git clone -b lab3 https://github.com/ksushka2
+cd APAHOVA_MispisitLabs
+docker compose up -d
 ```
 
-## Данные
+Откройте в браузере: http://localhost:8080
 
-Справочник курсов: `core/data/courses.json` (только чтение).  
-Заявки: `core/data/requests.json` (чтение и дополнение при отправке формы).
 
-## Сборка и публикация образа 0.0.2
-
+## Сборка образа 0.0.3
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64 -t ksushkaap/mispisit-lab1:0.0.2 --push .
+docker buildx build --platform linux/amd64,linux/arm64 -t ksushkaap/mispisit-lab1:0.0.3 --push .
 ```

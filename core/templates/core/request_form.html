@@ -2,7 +2,6 @@
 {% block title %}Новая заявка — {{ product_name }}{% endblock %}
 {% block content %}
 <h2>Подать заявку на курс</h2>
-<p class="muted">Данные сохраняются в JSON-файл до перезапуска контейнера или следующей лабораторной.</p>
 <form method="post" action="{% url 'request_create' %}">
     {% csrf_token %}
     <label for="child_full_name">ФИО ребёнка *</label>
