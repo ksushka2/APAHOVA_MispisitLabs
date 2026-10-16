@@ -13,9 +13,6 @@
     <dt>Комментарий</dt><dd>{{ item.comment|default:"—" }}</dd>
     <dt>Создана</dt><dd>{{ item.created_at }}</dd>
 </dl>
-<p class="muted">
-    Для проверки «чужой заявки» откройте эту же страницу с другим параметром
-    <code>?parent_phone=...</code> — система перенаправит на страницу отказа.
-</p>
+
 <a class="btn btn-secondary" href="{% url 'request_list' %}">К списку</a>
 {% endblock %}
