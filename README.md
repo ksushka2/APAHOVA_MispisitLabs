@@ -4,10 +4,12 @@
 
 ## Запуск
 
-Репозиторий: https://github.com
-Ветка: lab3  
-Pull Request: еще не сделала, сделаю
-Образ: ksushkaap/mispisit-lab1:0.0.3  
+Репозиторий: https://github.com/ksushka2/APAHOVA_MispisitLabs
+Ветка: lab3
+Pull: https://github.com/ksushka2/APAHOVA_MispisitLabs/pull/3
+Образ: ksushkaap/mispisit-lab1:0.0.3
+Страница образа: https://hub.docker.com/r/ksushkaap/mispisit-lab1
+ 
 
 ```bash
 git clone -b lab3 https://github.com
