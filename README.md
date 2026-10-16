@@ -16,7 +16,7 @@ Pull: https://github.com/ksushka2/APAHOVA_MispisitLabs/pull/3
  
 
 ```bash
-git clone -b lab3 https://github.com
+git clone -b lab3 https://github.com/ksushka2
 cd APAHOVA_MispisitLabs
 docker compose up -d
 ```
