@@ -5,9 +5,13 @@
 ## Запуск
 
 Репозиторий: https://github.com/ksushka2/APAHOVA_MispisitLabs
+
 Ветка: lab3
+
 Pull: https://github.com/ksushka2/APAHOVA_MispisitLabs/pull/3
+
 Образ: ksushkaap/mispisit-lab1:0.0.3
+
 Страница образа: https://hub.docker.com/r/ksushkaap/mispisit-lab1
  
 
