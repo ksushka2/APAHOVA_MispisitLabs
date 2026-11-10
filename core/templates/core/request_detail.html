@@ -1,18 +1,18 @@
 {% extends "core/base.html" %}
-{% block title %}{{ item.public_number }} — {{ product_name }}{% endblock %}
+{% block title %}Заявка {{ item.public_number }}{% endblock %}
 {% block content %}
-<h2>Заявка {{ item.public_number }}</h2>
-<dl>
-    <dt>Статус</dt><dd>{{ item.status }}</dd>
-    <dt>Ребёнок</dt><dd>{{ item.child_full_name }}, {{ item.child_age }} лет</dd>
-    <dt>Курс</dt><dd>{% if course %}{{ course.name }} — {{ course.description }}{% else %}—{% endif %}</dd>
-    <dt>Родитель</dt><dd>{{ item.parent_full_name }}</dd>
-    <dt>Телефон</dt><dd>{{ item.parent_phone }}</dd>
-    <dt>Email</dt><dd>{{ item.parent_email }}</dd>
-    <dt>Удобное время</dt><dd>{{ item.preferred_time|default:"—" }}</dd>
-    <dt>Комментарий</dt><dd>{{ item.comment|default:"—" }}</dd>
-    <dt>Создана</dt><dd>{{ item.created_at }}</dd>
-</dl>
-
-<a class="btn btn-secondary" href="{% url 'request_list' %}">К списку</a>
+<p class="eyebrow mb-2">Карточка заявки</p>
+<h1 class="mb-4">Заявка {{ item.public_number }}</h1>
+<section class="card p-4 p-md-5 form-panel">
+    <span class="status-badge align-self-start mb-3">Заявка сохранена</span>
+    <dl class="row mb-2">
+        <dt class="col-sm-4">Программа</dt><dd class="col-sm-8">{{ item.program.name }}</dd>
+        <dt class="col-sm-4">Педагог</dt><dd class="col-sm-8">{{ item.full_name }}</dd>
+        <dt class="col-sm-4">Организация</dt><dd class="col-sm-8">{{ item.organization }}</dd>
+        <dt class="col-sm-4">Рабочая почта</dt><dd class="col-sm-8 text-break">{{ item.email }}</dd>
+        <dt class="col-sm-4">Стаж, лет</dt><dd class="col-sm-8">{{ item.experience }}</dd>
+        <dt class="col-sm-4">Дата подачи</dt><dd class="col-sm-8">{{ item.created_at|date:"d.m.Y" }}</dd>
+    </dl>
+    <a class="btn btn-outline-primary align-self-start" href="{% url 'request_list' %}">К реестру заявок</a>
+</section>
 {% endblock %}

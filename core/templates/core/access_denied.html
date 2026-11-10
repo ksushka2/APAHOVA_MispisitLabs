@@ -1,18 +1,14 @@
 {% extends "core/base.html" %}
-{% block title %}Отказ — {{ product_name }}{% endblock %}
+{% block title %}{{ reason_title }}{% endblock %}
 {% block content %}
-<h2>Действие не выполнено</h2>
-<div class="error-box">
-    <p><strong>{{ reason_title }}</strong></p>
-    <p>{{ detail }}</p>
-    {% if attempted %}
-    <p class="muted">Попытка доступа к заявке: {{ attempted }}</p>
-    {% endif %}
+<p class="eyebrow mb-2">Проверка условий заявки</p>
+<h1 class="mb-4">{% if is_demo %}Проверка отказа{% else %}Действие не выполнено{% endif %}</h1>
+<section class="alert {% if is_demo %}alert-info{% else %}alert-warning{% endif %} p-4 p-md-5 form-panel" {% if not is_demo %}role="alert"{% endif %}>
+    <h2 class="h4 mb-2">{{ reason_title }}</h2>
+    <p class="mb-0">{{ detail }}</p>
+</section>
+<div class="d-flex flex-wrap gap-2 mt-4">
+    <a class="btn btn-primary" href="{% url 'request_create' %}">{% if is_demo %}Открыть форму{% else %}Вернуться к форме{% endif %}</a>
+    <a class="btn btn-outline-primary" href="{% url 'request_list' %}">К реестру</a>
 </div>
-<p>Что можно сделать:</p>
-<ul>
-    <li>исправить данные и <a href="{% url 'request_create' %}">отправить заявку заново</a>;</li>
-    <li>открыть <a href="{% url 'request_list' %}">список своих заявок</a> с корректным телефоном родителя;</li>
-    <li>вернуться на <a href="{% url 'home' %}">главную</a>.</li>
-</ul>
 {% endblock %}

@@ -1,26 +1,29 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ product_name }}</title>
-    <style>
-        body {
-            font-family: system-ui, sans-serif;
-            max-width: 40rem;
-            margin: 4rem auto;
-            padding: 0 1rem;
-            line-height: 1.6;
-        }
-        h1 { margin-bottom: 0.25rem; }
-        p { margin: 0.5rem 0; }
-        .muted { color: #555; }
-    </style>
-</head>
-<body>
-    <h1>{{ product_name }}</h1>
-    <p>{{ description }}</p>
-    <p>Версия {{ version }}</p>
-    <p class="muted">Разработка продолжается</p>
-</body>
-</html>
+{% extends "core/base.html" %}
+{% block content %}
+<section class="hero p-4 p-lg-5">
+    <p class="eyebrow mb-3">Кабинет педагога</p>
+    <h1 class="display-6 fw-semibold mb-3">{{ product_name }}</h1>
+    <p class="lead mb-4">Подайте заявку на программу методической поддержки и найдите её в общем реестре.</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{% url 'request_create' %}">Подать заявку</a>
+        <a class="btn btn-outline-primary" href="{% url 'request_list' %}">Открыть реестр</a>
+    </div>
+</section>
+<div class="row g-3 mt-3">
+    <div class="col-md-4"><section class="card h-100 p-4">
+        <p class="eyebrow mb-2">01 · Программа</p>
+        <h2 class="h5">Выберите поддержку</h2>
+        <p class="text-secondary mb-0">В форме указаны программы и требования к стажу.</p>
+    </section></div>
+    <div class="col-md-4"><section class="card h-100 p-4">
+        <p class="eyebrow mb-2">02 · Заявка</p>
+        <h2 class="h5">Получите номер</h2>
+        <p class="text-secondary mb-0">После отправки в реестре появится ваша заявка.</p>
+    </section></div>
+    <div class="col-md-4"><section class="card h-100 p-4">
+        <p class="eyebrow mb-2">03 · Условия</p>
+        <h2 class="h5">Проверьте ограничения</h2>
+        <a href="{% url 'access_denied' %}">Как воспроизвести отказ</a>
+    </section></div>
+</div>
+{% endblock %}

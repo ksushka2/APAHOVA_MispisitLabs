@@ -2,7 +2,7 @@ name: mispisit-apahova
 
 services:
   app:
-    image: ksushkaap/mispisit-lab1:0.0.3
+    image: ksushkaap/mispisit-lab1:0.0.4
     ports:
       - "8080:8080"
     environment:
