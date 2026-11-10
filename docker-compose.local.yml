@@ -1,0 +1,6 @@
+# Local preparation before publishing the new IT-school image.
+# The app uses its own local tag; the registry tag is not overwritten.
+services:
+  app:
+    image: mispisit-it-school-local:0.0.4
+    build: .

@@ -1,14 +1,13 @@
 {% extends "core/base.html" %}
 {% block title %}{{ reason_title }}{% endblock %}
 {% block content %}
-<p class="eyebrow mb-2">Проверка условий заявки</p>
-<h1 class="mb-4">{% if is_demo %}Проверка отказа{% else %}Действие не выполнено{% endif %}</h1>
-<section class="alert {% if is_demo %}alert-info{% else %}alert-warning{% endif %} p-4 p-md-5 form-panel" {% if not is_demo %}role="alert"{% endif %}>
-    <h2 class="h4 mb-2">{{ reason_title }}</h2>
-    <p class="mb-0">{{ detail }}</p>
+<h1>{% if is_demo %}Проверка отказа{% else %}{{ reason_title }}{% endif %}</h1>
+<section class="panel panel-body" {% if not is_demo %}role="alert"{% endif %}>
+    <p>{{ detail }}</p>
+    {% if is_demo %}<p>В карточке заявки также можно проверить отказ, указав телефон другого родителя.</p>{% endif %}
+    <div class="actions">
+        <a class="btn btn-primary" href="{% url 'request_create' %}">{% if is_demo %}Открыть форму{% else %}Вернуться к форме{% endif %}</a>
+        <a href="{% url 'request_list' %}">К списку заявок</a>
+    </div>
 </section>
-<div class="d-flex flex-wrap gap-2 mt-4">
-    <a class="btn btn-primary" href="{% url 'request_create' %}">{% if is_demo %}Открыть форму{% else %}Вернуться к форме{% endif %}</a>
-    <a class="btn btn-outline-primary" href="{% url 'request_list' %}">К реестру</a>
-</div>
 {% endblock %}

@@ -1,22 +1,28 @@
 {% extends "core/base.html" %}
 {% block title %}Новая заявка{% endblock %}
 {% block content %}
-<p class="eyebrow mb-2">Методическая поддержка</p>
-<h1 class="mb-2">Новая заявка</h1>
-<p class="text-secondary mb-4">Заполните все поля. У каждой программы свой минимальный стаж.</p>
-<form class="card p-4 p-md-5 form-panel" method="post" action="{% url 'request_create' %}">
+<h1>Новая заявка</h1>
+<p>Заполните данные ребёнка и родителя. Все поля обязательны.</p>
+<form class="panel panel-body form-panel" method="post" action="{% url 'request_create' %}" novalidate>
     {% csrf_token %}
+    {% if form.errors %}
+    <p class="form-error-summary" role="alert">Проверьте заполнение формы. Исправьте ошибки, указанные под полями.</p>
+    {% endif %}
     <div class="row g-3">
         {% for field in form %}
-        <div class="{% if field.name == 'program' %}col-12{% else %}col-md-6{% endif %}">
+        <div class="{% if field.name == 'parent_phone' or field.name == 'parent_email' %}col-md-6{% else %}col-12{% endif %}">
             <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
+            <div id="id_{{ field.name }}_errors" class="field-errors">
+                {% for error in field.errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+            </div>
         </div>
         {% endfor %}
     </div>
-    <div class="d-flex flex-wrap gap-2 mt-4">
+    <p class="form-note">Возраст ребёнка должен соответствовать выбранному курсу.</p>
+    <div class="actions">
         <button class="btn btn-primary" type="submit">Отправить заявку</button>
-        <a class="btn btn-outline-primary" href="{% url 'request_list' %}">К реестру</a>
+        <a href="{% url 'request_list' %}">К списку заявок</a>
     </div>
 </form>
 {% endblock %}
