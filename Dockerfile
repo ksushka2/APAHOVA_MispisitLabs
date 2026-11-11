@@ -9,8 +9,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && gunicorn it_school.wsgi:application --bind 0.0.0.0:8080"]
+CMD ["sh", "-c", "python manage.py migrate --noinput --fake-initial && exec gunicorn it_school.wsgi:application --bind 0.0.0.0:8080"]
 

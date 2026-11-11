@@ -19,3 +19,25 @@ class StudentRequest(models.Model):
 
     def __str__(self):
         return f"{self.public_number} - {self.child_full_name}"
+
+
+class SupportProgram(models.Model):
+    name = models.CharField(max_length=160, unique=True)
+    min_experience = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.name} (стаж от {self.min_experience} лет)"
+
+
+class TeacherRequest(models.Model):
+    full_name = models.CharField(max_length=160)
+    organization = models.CharField(max_length=160)
+    email = models.EmailField()
+    experience = models.PositiveSmallIntegerField()
+    program = models.ForeignKey(SupportProgram, on_delete=models.PROTECT)
+    owner_session = models.CharField(max_length=40, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def public_number(self):
+        return f"DO-{self.pk:04d}"

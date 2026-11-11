@@ -1,0 +1,80 @@
+:root {
+    --burgundy: #800030;
+    --burgundy-dark: #5e0023;
+    --line: #c9d8e4;
+    --bs-body-bg: #e7f3fc;
+    --bs-body-color: #283440;
+    --bs-body-font-family: Arial, sans-serif;
+    --bs-link-color-rgb: 128, 0, 48;
+    --bs-link-hover-color-rgb: 94, 0, 35;
+}
+
+.site-shell { max-width: 1000px; }
+.site-header { background: #fff; border-bottom: 1px solid var(--line); }
+.header-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 0; }
+.brand { color: var(--burgundy); font-size: 1.35rem; font-weight: bold; text-decoration: none; }
+.version-label { color: #596570; font-size: .85rem; }
+.main-nav { display: flex; flex-wrap: wrap; gap: .3rem 1.5rem; padding-bottom: .8rem; }
+.main-nav a { color: #384552; text-decoration: none; }
+.main-nav a[aria-current="page"] { color: var(--burgundy); text-decoration: underline; text-underline-offset: .3em; }
+.main-nav a:hover { color: var(--burgundy); text-decoration: underline; }
+.main-content { padding-top: 2rem; padding-bottom: 3rem; }
+h1 { font-size: 1.65rem; font-weight: 600; margin-bottom: 1rem; overflow-wrap: anywhere; }
+h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: .7rem; }
+p { line-height: 1.6; }
+.page-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.page-heading h1 { margin: 0; }
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 3px; }
+.panel-body { padding: 1.5rem; }
+.form-panel, .detail-panel { max-width: 720px; }
+.table { --bs-table-border-color: #dbe3e9; font-size: .95rem; }
+.table > :not(caption) > * > * { padding: 1rem; vertical-align: middle; }
+.table thead th { background: #f3f7fa; font-weight: 600; }
+.table tbody th { font-weight: 400; }
+.table tr:last-child > * { border-bottom: 0; }
+.form-label { font-size: .95rem; margin-bottom: .35rem; }
+.form-control, .form-select { border-color: #b9c9d5; border-radius: 3px; }
+.form-control:focus, .form-select:focus { border-color: var(--burgundy); box-shadow: 0 0 0 .15rem #80003018; }
+.form-note { color: #596570; font-size: .9rem; margin: 1.1rem 0; }
+.field-errors, .form-error-summary { color: var(--burgundy); font-size: .9rem; }
+.field-errors:not(:empty) { margin-top: .3rem; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem; }
+.btn { --bs-btn-border-radius: 3px; }
+.btn-primary {
+    --bs-btn-bg: var(--burgundy);
+    --bs-btn-border-color: var(--burgundy);
+    --bs-btn-hover-bg: var(--burgundy-dark);
+    --bs-btn-hover-border-color: var(--burgundy-dark);
+    --bs-btn-active-bg: var(--burgundy-dark);
+    --bs-btn-active-border-color: var(--burgundy-dark);
+    --bs-btn-focus-shadow-rgb: 128, 0, 48;
+}
+.btn-outline-primary {
+    --bs-btn-color: var(--burgundy);
+    --bs-btn-border-color: var(--burgundy);
+    --bs-btn-hover-bg: var(--burgundy);
+    --bs-btn-hover-border-color: var(--burgundy);
+    --bs-btn-active-bg: var(--burgundy-dark);
+    --bs-btn-active-border-color: var(--burgundy-dark);
+    --bs-btn-focus-shadow-rgb: 128, 0, 48;
+}
+.details-list { display: grid; grid-template-columns: 11rem 1fr; gap: .8rem 1.5rem; margin-bottom: 1.5rem; }
+.details-list dt { font-weight: 600; }
+.details-list dd { margin: 0; overflow-wrap: anywhere; }
+.access-check { margin-top: 1.5rem; max-width: 720px; }
+.access-check summary { color: var(--burgundy); }
+.access-check p { margin-top: .8rem; font-size: .9rem; }
+.phone-check { max-width: 20rem; }
+.skip-link { display: block; padding: .5rem; background: #fff; }
+:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
+
+@media (max-width: 600px) {
+    .site-shell { padding-left: 1rem; padding-right: 1rem; }
+    .main-nav { gap: .6rem 1rem; font-size: .9rem; }
+    .main-content { padding-top: 1.5rem; }
+    .panel-body { padding: 1rem; }
+    .table { font-size: .85rem; }
+    .table > :not(caption) > * > * { padding: .75rem; }
+    .details-list { grid-template-columns: 1fr; gap: .3rem; }
+    .details-list dd { margin-bottom: .6rem; }
+}

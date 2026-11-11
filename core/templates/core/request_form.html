@@ -1,38 +1,28 @@
 {% extends "core/base.html" %}
-{% block title %}Новая заявка — {{ product_name }}{% endblock %}
+{% block title %}Новая заявка{% endblock %}
 {% block content %}
-<h2>Подать заявку на курс</h2>
-<form method="post" action="{% url 'request_create' %}">
+<h1>Новая заявка</h1>
+<p>Заполните данные ребёнка и родителя. Все поля обязательны.</p>
+<form class="panel panel-body form-panel" method="post" action="{% url 'request_create' %}" novalidate>
     {% csrf_token %}
-    <label for="child_full_name">ФИО ребёнка *</label>
-    <input id="child_full_name" name="child_full_name" required maxlength="120">
-
-    <label for="child_age">Возраст ребёнка *</label>
-    <input id="child_age" name="child_age" type="number" min="5" max="18" required>
-
-    <label for="parent_full_name">ФИО родителя *</label>
-    <input id="parent_full_name" name="parent_full_name" required maxlength="120">
-
-    <label for="parent_phone">Телефон родителя *</label>
-    <input id="parent_phone" name="parent_phone" required placeholder="+79001234567">
-
-    <label for="parent_email">Email родителя *</label>
-    <input id="parent_email" name="parent_email" type="email" required>
-
-    <label for="course_id">Курс *</label>
-    <select id="course_id" name="course_id" required>
-        {% for c in courses %}
-        <option value="{{ c.id }}">{{ c.name }} ({{ c.min_age }}–{{ c.max_age }} лет)</option>
+    {% if form.errors %}
+    <p class="form-error-summary" role="alert">Проверьте заполнение формы. Исправьте ошибки, указанные под полями.</p>
+    {% endif %}
+    <div class="row g-3">
+        {% for field in form %}
+        <div class="{% if field.name == 'parent_phone' or field.name == 'parent_email' %}col-md-6{% else %}col-12{% endif %}">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            <div id="id_{{ field.name }}_errors" class="field-errors">
+                {% for error in field.errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+            </div>
+        </div>
         {% endfor %}
-    </select>
-
-    <label for="preferred_time">Удобное время занятий</label>
-    <input id="preferred_time" name="preferred_time" placeholder="Например: Сб 14:00">
-
-    <label for="comment">Комментарий</label>
-    <textarea id="comment" name="comment" rows="3"></textarea>
-
-    <button type="submit">Отправить заявку</button>
+    </div>
+    <p class="form-note">Возраст ребёнка должен соответствовать выбранному курсу.</p>
+    <div class="actions">
+        <button class="btn btn-primary" type="submit">Отправить заявку</button>
+        <a href="{% url 'request_list' %}">К списку заявок</a>
+    </div>
 </form>
-<p class="muted">Для проверки отказа укажите возраст вне диапазона выбранного курса.</p>
 {% endblock %}

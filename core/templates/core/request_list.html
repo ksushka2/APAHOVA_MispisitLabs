@@ -1,31 +1,33 @@
 {% extends "core/base.html" %}
-{% block title %}Заявки — {{ product_name }}{% endblock %}
+{% block title %}Заявки на обучение{% endblock %}
 {% block content %}
-<h2>Заявки на курсы</h2>
+<div class="page-heading">
+    <h1>Заявки на обучение</h1>
+    <a class="btn btn-primary" href="{% url 'request_create' %}">Новая заявка</a>
+</div>
 {% if requests %}
-<table>
-    <thead>
-        <tr>
-            <th>Номер</th>
-            <th>Ребёнок</th>
-            <th>Курс</th>
-            <th>Статус</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in requests %}
-        <tr>
-            <td>{{ r.public_number }}</td>
-            <td>{{ r.child_full_name }}, {{ r.child_age }} лет</td>
-            <td>{{ r.course_name }}</td>
-            <td>{{ r.status }}</td>
-            <td><a href="{% url 'request_detail' pk=r.id %}">Открыть</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="panel">
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <caption class="visually-hidden">Список заявок на обучение</caption>
+            <thead><tr><th scope="col">Номер заявки</th><th scope="col">Курс</th><th scope="col">Возраст</th><th scope="col"><span class="visually-hidden">Карточка</span></th></tr></thead>
+            <tbody>
+                {% for item in requests %}
+                <tr>
+                    <th scope="row">{{ item.public_number }}</th>
+                    <td>{{ item.course.name }}</td>
+                    <td class="text-nowrap">{{ item.child_age }} лет</td>
+                    <td class="text-end"><a href="{% url 'request_detail' pk=item.pk %}" aria-label="Открыть заявку {{ item.public_number }}">Открыть</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% else %}
-<p>Заявок пока нет. <a href="{% url 'request_create' %}">Создайте первую</a>.</p>
+<section class="panel panel-body">
+    <h2>Заявок пока нет</h2>
+    <p class="mb-0">Чтобы записаться на курс, нажмите «Новая заявка».</p>
+</section>
 {% endif %}
 {% endblock %}

@@ -1,26 +1,24 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ product_name }}</title>
-    <style>
-        body {
-            font-family: system-ui, sans-serif;
-            max-width: 40rem;
-            margin: 4rem auto;
-            padding: 0 1rem;
-            line-height: 1.6;
-        }
-        h1 { margin-bottom: 0.25rem; }
-        p { margin: 0.5rem 0; }
-        .muted { color: #555; }
-    </style>
-</head>
-<body>
-    <h1>{{ product_name }}</h1>
-    <p>{{ description }}</p>
-    <p>Версия {{ version }}</p>
-    <p class="muted">Разработка продолжается</p>
-</body>
-</html>
+{% extends "core/base.html" %}
+{% block content %}
+<h1>Курсы для детей</h1>
+<p>Выберите курс и заполните заявку на обучение в IT-школе.</p>
+<div class="panel">
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <caption class="visually-hidden">Курсы IT-школы и возрастные ограничения</caption>
+            <thead><tr><th scope="col">Курс</th><th scope="col">Возраст</th><th scope="col"><span class="visually-hidden">Запись</span></th></tr></thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <th scope="row">{{ course.name }}</th>
+                    <td class="text-nowrap">{{ course.min_age }}–{{ course.max_age }} лет</td>
+                    <td class="text-end"><a href="{% url 'request_create' %}?course={{ course.pk }}">Записаться</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">Курсы пока не добавлены.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

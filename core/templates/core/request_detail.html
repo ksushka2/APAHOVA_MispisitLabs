@@ -1,18 +1,28 @@
 {% extends "core/base.html" %}
-{% block title %}{{ item.public_number }} — {{ product_name }}{% endblock %}
+{% block title %}Заявка {{ item.public_number }}{% endblock %}
 {% block content %}
-<h2>Заявка {{ item.public_number }}</h2>
-<dl>
-    <dt>Статус</dt><dd>{{ item.status }}</dd>
-    <dt>Ребёнок</dt><dd>{{ item.child_full_name }}, {{ item.child_age }} лет</dd>
-    <dt>Курс</dt><dd>{% if course %}{{ course.name }} — {{ course.description }}{% else %}—{% endif %}</dd>
-    <dt>Родитель</dt><dd>{{ item.parent_full_name }}</dd>
-    <dt>Телефон</dt><dd>{{ item.parent_phone }}</dd>
-    <dt>Email</dt><dd>{{ item.parent_email }}</dd>
-    <dt>Удобное время</dt><dd>{{ item.preferred_time|default:"—" }}</dd>
-    <dt>Комментарий</dt><dd>{{ item.comment|default:"—" }}</dd>
-    <dt>Создана</dt><dd>{{ item.created_at }}</dd>
-</dl>
-
-<a class="btn btn-secondary" href="{% url 'request_list' %}">К списку</a>
+<h1>Заявка {{ item.public_number }}</h1>
+<section class="panel panel-body detail-panel">
+    <dl class="details-list">
+        <dt>Курс</dt><dd>{{ item.course.name }}</dd>
+        <dt>ФИО ребёнка</dt><dd>{{ item.child_full_name }}</dd>
+        <dt>Возраст ребёнка</dt><dd>{{ item.child_age }} лет</dd>
+        <dt>ФИО родителя</dt><dd>{{ item.parent_full_name }}</dd>
+        <dt>Телефон родителя</dt><dd>{{ item.parent_phone }}</dd>
+        <dt>Электронная почта</dt><dd>{{ item.parent_email }}</dd>
+    </dl>
+    <div class="actions">
+        <a class="btn btn-primary" href="{% url 'request_list' %}">К списку заявок</a>
+        <a href="{% url 'request_create' %}">Новая заявка</a>
+    </div>
+</section>
+<details class="access-check">
+    <summary>Проверка отказа по телефону</summary>
+    <p>Укажите телефон другого родителя, чтобы проверить отказ при открытии чужой заявки.</p>
+    <form method="get" action="{% url 'request_detail' pk=item.pk %}" class="actions">
+        <label class="visually-hidden" for="viewer-phone">Телефон для проверки</label>
+        <input id="viewer-phone" class="form-control phone-check" type="tel" name="parent_phone" placeholder="Телефон родителя" required>
+        <button class="btn btn-outline-primary" type="submit">Проверить</button>
+    </form>
+</details>
 {% endblock %}

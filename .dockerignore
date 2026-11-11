@@ -6,3 +6,5 @@ __pycache__
 .idea
 *.md
 !README.md
+staticfiles
+docs/
