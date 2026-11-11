@@ -30,6 +30,7 @@ Pull: https://github.com/ksushka2/APAHOVA_MispisitLabs/pull/3
 git clone -b lab3 https://github.com/ksushka2
 cd APAHOVA_MispisitLabs
 docker compose up -d
+docker run --rm -p 8080:8080 ksushkaap/mispisit-lab1:0.0.3
 ```
 
 Откройте в браузере: http://localhost:8080
