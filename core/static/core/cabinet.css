@@ -31,6 +31,9 @@ p { line-height: 1.6; }
 .table > :not(caption) > * > * { padding: 1rem; vertical-align: middle; }
 .table thead th { background: #f3f7fa; font-weight: 600; }
 .table tbody th { font-weight: 400; }
+.notification-status { color: var(--burgundy) !important; white-space: nowrap; }
+.notification-table { --bs-table-bg: #fff; }
+.notification-table-scroll { overflow-y: hidden; }
 .table tr:last-child > * { border-bottom: 0; }
 .form-label { font-size: .95rem; margin-bottom: .35rem; }
 .form-control, .form-select { border-color: #b9c9d5; border-radius: 3px; }

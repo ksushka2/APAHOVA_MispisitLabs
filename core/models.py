@@ -21,6 +21,37 @@ class StudentRequest(models.Model):
         return f"{self.public_number} - {self.child_full_name}"
 
 
+class Notification(models.Model):
+    class EventType(models.TextChoices):
+        REQUEST_CREATED = "request_created", "Создана заявка"
+
+    class Status(models.TextChoices):
+        NEW = "new", "Новое"
+
+    request = models.ForeignKey(
+        StudentRequest, on_delete=models.PROTECT, related_name="notifications",
+        verbose_name="Заявка",
+    )
+    event_type = models.CharField(max_length=32, choices=EventType.choices)
+    message = models.CharField(max_length=512, verbose_name="Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Время")
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.NEW)
+
+    class Meta:
+        # В лабораторной 5 таблица создаётся командой init_notifications при запуске.
+        managed = False
+        db_table = "core_notification"
+        ordering = ["-created_at", "-pk"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["request", "event_type"], name="unique_request_notification_event",
+            ),
+        ]
+
+    def __str__(self):
+        return self.message
+
+
 class SupportProgram(models.Model):
     name = models.CharField(max_length=160, unique=True)
     min_experience = models.PositiveSmallIntegerField()

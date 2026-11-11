@@ -1,3 +1,5 @@
+from django.core.management import call_command
+from django.db import connection
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -5,6 +7,13 @@ from .models import Course, StudentRequest
 
 
 class ItSchoolFlowTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Новая таблица этой лабы создаётся при запуске, вне миграций.
+        with connection.constraint_checks_disabled():
+            call_command("init_notifications", verbosity=0)
+        super().setUpClass()
+
     @classmethod
     def setUpTestData(cls):
         cls.course = Course.objects.get(name="Scratch для начинающих")
@@ -20,7 +29,7 @@ class ItSchoolFlowTests(TestCase):
         for url in ("/", "/requests/", "/requests/new/", "/access-denied/"):
             response = self.client.get(url)
             self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "Версия 0.0.4")
+            self.assertContains(response, "Версия 0.0.5")
             self.assertContains(response, 'href="/requests/new/"')
             self.assertNotContains(response, "Педагог ДО")
         self.assertContains(self.client.get("/requests/"), "Заявок пока нет")

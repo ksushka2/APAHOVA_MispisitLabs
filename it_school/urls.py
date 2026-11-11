@@ -3,6 +3,7 @@ from django.urls import path
 from core.views import (
     access_denied,
     home,
+    notification_list,
     request_create,
     request_detail,
     request_list,
@@ -14,4 +15,5 @@ urlpatterns = [
     path("requests/new/", request_create, name="request_create"),
     path("requests/<int:pk>/", request_detail, name="request_detail"),
     path("access-denied/", access_denied, name="access_denied"),
+    path("notifications/", notification_list, name="notification_list"),
 ]

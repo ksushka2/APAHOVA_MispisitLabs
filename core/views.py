@@ -1,16 +1,17 @@
 from urllib.parse import urlencode
 from uuid import uuid4
 
+from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods
 
 from .forms import StudentRequestForm
-from .models import Course, StudentRequest
+from .models import Course, Notification, StudentRequest
 
 
 PRODUCT_NAME = "IT-Школа"
-VERSION = "0.0.4"
+VERSION = "0.0.5"
 DENIALS = {
     "age_mismatch": (
         "Возраст не подходит для курса",
@@ -60,7 +61,13 @@ def request_create(request):
             return _deny("age_mismatch")
         # UUID-based numbers avoid a race between simultaneous form submissions.
         record.public_number = f"REQ-{uuid4().hex[:12].upper()}"
-        record.save()
+        with transaction.atomic():
+            record.save()
+            Notification.objects.create(
+                request=record,
+                event_type=Notification.EventType.REQUEST_CREATED,
+                message=f"Поступила заявка {record.public_number} на курс «{record.course.name}».",
+            )
         return redirect("request_detail", pk=record.pk)
     return _page(request, "request_form", "new", form=form,
                  status=400 if request.method == "POST" else 200)
@@ -78,6 +85,12 @@ def request_detail(request, pk):
         if digits(request.GET["parent_phone"]) != digits(record.parent_phone):
             return _deny("foreign_request")
     return _page(request, "request_detail", "list", item=record)
+
+
+@require_GET
+def notification_list(request):
+    items = Notification.objects.select_related("request")
+    return _page(request, "notification_list", "notifications", notifications=items)
 
 
 @require_GET

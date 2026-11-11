@@ -1,6 +1,32 @@
-# Local preparation before publishing the new IT-school image.
-# The app uses its own local tag; the registry tag is not overwritten.
+name: mispisit-apahova-lab5-local
+
+# Отдельный запуск пятой лабы: свой проект, база, том и порт 8085.
+# Этот файл используется самостоятельно, без основного compose-файла.
 services:
   app:
-    image: mispisit-it-school-local:0.0.4
+    image: mispisit-it-school-local:0.0.5
     build: .
+    ports:
+      - "8085:8080"
+    environment:
+      DATABASE_URL: postgres://app:app@db:5432/app
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  dbdata:
