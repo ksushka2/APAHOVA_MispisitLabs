@@ -27,6 +27,7 @@ class Notification(models.Model):
 
     class Status(models.TextChoices):
         NEW = "new", "Новое"
+        SENT = "sent", "Отправлено"
 
     request = models.ForeignKey(
         StudentRequest, on_delete=models.PROTECT, related_name="notifications",

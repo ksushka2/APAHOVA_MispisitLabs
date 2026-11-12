@@ -7,6 +7,7 @@
     <title>{% block title %}IT-Школа{% endblock %} · {{ version }}</title>
     <link rel="stylesheet" href="{% static 'core/vendor/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'core/cabinet.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
     <a class="visually-hidden-focusable skip-link" href="#main">Перейти к содержанию</a>

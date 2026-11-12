@@ -1,8 +1,10 @@
 {% extends "core/base.html" %}
 {% block title %}Уведомления{% endblock %}
+{% block extra_head %}{% if has_pending %}<meta http-equiv="refresh" content="5">{% endif %}{% endblock %}
 {% block content %}
 <div class="page-heading">
     <h1>Уведомления</h1>
+    <a href="{{ mailpit_url }}" target="_blank" rel="noopener">Письма сотруднику</a>
 </div>
 {% if notifications %}
 <div class="panel">

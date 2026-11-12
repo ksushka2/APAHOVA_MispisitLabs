@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 from uuid import uuid4
 
+from django.conf import settings
 from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -90,7 +91,11 @@ def request_detail(request, pk):
 @require_GET
 def notification_list(request):
     items = Notification.objects.select_related("request")
-    return _page(request, "notification_list", "notifications", notifications=items)
+    return _page(
+        request, "notification_list", "notifications", notifications=items,
+        has_pending=items.filter(status=Notification.Status.NEW).exists(),
+        mailpit_url=settings.MAILPIT_URL,
+    )
 
 
 @require_GET

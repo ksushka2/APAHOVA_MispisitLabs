@@ -1,18 +1,39 @@
-name: mispisit-apahova-lab5-local
+name: mispisit-apahova-lab5-worker-local
 
 # Отдельный запуск пятой лабы: свой проект, база, том и порт 8085.
 # Этот файл используется самостоятельно, без основного compose-файла.
 services:
   app:
-    image: mispisit-it-school-local:0.0.5
+    image: mispisit-it-school-worker-local:0.0.5
     build: .
     ports:
       - "8085:8080"
     environment:
       DATABASE_URL: postgres://app:app@db:5432/app
+      MAILPIT_URL: http://localhost:8026
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/notifications/', timeout=3).read()"]
+      interval: 5s
+      timeout: 4s
+      retries: 10
+      start_period: 10s
+  worker:
+    image: mispisit-it-school-worker-local:0.0.5
+    command: ["python", "manage.py", "process_notifications"]
+    environment:
+      DATABASE_URL: postgres://app:app@db:5432/app
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      PUBLIC_BASE_URL: http://localhost:8085
+    depends_on:
+      app:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    restart: unless-stopped
   db:
     image: postgres:18
     environment:
@@ -27,6 +48,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+  mailpit:
+    image: axllent/mailpit:v1.33.0
+    ports:
+      - "8026:8025"
+    environment:
+      MP_DATABASE: /data/mailpit.db
+    volumes:
+      - maildata:/data
 volumes:
   dbdata:
+  maildata:
