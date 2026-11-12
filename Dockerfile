@@ -13,5 +13,5 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "python manage.py migrate --noinput --fake-initial && exec gunicorn it_school.wsgi:application --bind 0.0.0.0:8080"]
+CMD ["sh", "-c", "python manage.py migrate --noinput --fake-initial && python manage.py init_notifications && exec gunicorn it_school.wsgi:application --bind 0.0.0.0:8080 --threads 2"]
 

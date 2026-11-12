@@ -1,10 +1,20 @@
-from django.test import Client, TestCase
+from django.core.management import call_command
+from django.db import connection
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from .models import Course, StudentRequest
+from .models import Course, Notification, StudentRequest
+from .notifications import send_next_notification
 
 
 class ItSchoolFlowTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Новая таблица этой лабы создаётся при запуске, вне миграций.
+        with connection.constraint_checks_disabled():
+            call_command("init_notifications", verbosity=0)
+        super().setUpClass()
+
     @classmethod
     def setUpTestData(cls):
         cls.course = Course.objects.get(name="Scratch для начинающих")
@@ -20,7 +30,7 @@ class ItSchoolFlowTests(TestCase):
         for url in ("/", "/requests/", "/requests/new/", "/access-denied/"):
             response = self.client.get(url)
             self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "Версия 0.0.4")
+            self.assertContains(response, "Версия 0.0.5")
             self.assertContains(response, 'href="/requests/new/"')
             self.assertNotContains(response, "Педагог ДО")
         self.assertContains(self.client.get("/requests/"), "Заявок пока нет")
@@ -41,6 +51,7 @@ class ItSchoolFlowTests(TestCase):
             self.assertEqual(response.redirect_chain[-1][0], "/access-denied/?reason=age_mismatch")
             self.assertContains(response, "Возраст не подходит", status_code=422)
         self.assertFalse(StudentRequest.objects.exists())
+        self.assertFalse(Notification.objects.exists())
 
     def test_both_inclusive_age_bounds_are_accepted(self):
         for age in ("7", "9"):
@@ -55,6 +66,7 @@ class ItSchoolFlowTests(TestCase):
             self.assertContains(response, "Проверьте заполнение формы", status_code=400)
             self.assertContains(response, "Мария Смирнова", status_code=400)
         self.assertFalse(StudentRequest.objects.exists())
+        self.assertFalse(Notification.objects.exists())
 
     def test_foreign_phone_and_matching_formatted_phone(self):
         self.client.post(reverse("request_create"), self.data())
@@ -86,3 +98,44 @@ class ItSchoolFlowTests(TestCase):
         self.assertEqual(response.status_code, 403)
         self.client.get(reverse("request_create"), self.data())
         self.assertFalse(StudentRequest.objects.exists())
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_worker_sends_linked_email_once_and_changes_status(self):
+        from django.core import mail
+        self.client.post(reverse("request_create"), self.data())
+        item = Notification.objects.get()
+        self.assertEqual(item.status, Notification.Status.NEW)
+        self.assertContains(self.client.get("/notifications/"), 'http-equiv="refresh"')
+        self.assertEqual(send_next_notification(), item.pk)
+        item.refresh_from_db()
+        self.assertEqual(item.status, Notification.Status.SENT)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(item.request.public_number, mail.outbox[0].subject)
+        self.assertIn(f"http://localhost:8080/requests/{item.request_id}/", mail.outbox[0].body)
+        self.assertEqual(mail.outbox[0].to, ["staff@it-school.test"])
+        self.assertIsNone(send_next_notification())
+        self.assertEqual(len(mail.outbox), 1)
+        page = self.client.get("/notifications/")
+        self.assertContains(page, "Отправлено")
+        self.assertNotContains(page, 'http-equiv="refresh"')
+
+    def test_worker_keeps_new_status_on_smtp_failure(self):
+        from smtplib import SMTPException
+        from unittest.mock import patch
+        self.client.post(reverse("request_create"), self.data())
+        item = Notification.objects.get()
+        with patch("core.notifications.EmailMessage.send", side_effect=SMTPException("unavailable")):
+            with self.assertRaises(SMTPException):
+                send_next_notification()
+        item.refresh_from_db()
+        self.assertEqual(item.status, Notification.Status.NEW)
+        self.assertEqual(StudentRequest.objects.count(), 1)
+
+    def test_worker_does_not_mark_zero_delivery_as_sent(self):
+        from smtplib import SMTPException
+        from unittest.mock import patch
+        self.client.post(reverse("request_create"), self.data())
+        with patch("core.notifications.EmailMessage.send", return_value=0):
+            with self.assertRaises(SMTPException):
+                send_next_notification()
+        self.assertEqual(Notification.objects.get().status, Notification.Status.NEW)
